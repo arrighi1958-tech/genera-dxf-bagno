@@ -5,7 +5,7 @@ import io
 
 st.set_page_config(page_title="Progetto Esecutivo - Doppia Sala da Bagno", layout="centered")
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
-st.markdown("Pianta esecutiva con dimensioni ufficiali (**247 x 215 cm**), cavedio, finestre ruotate e **doppia porta d'accesso** per i due bagni.")
+st.markdown("Pianta esecutiva con dimensioni ufficiali (**247 x 215 cm**), cavedio, finestre e porta del bagno principale ruotata verso l'interno.")
 
 def genera_dxf_bytes():
     doc = ezdxf.new(dxfversion='AC1024')
@@ -50,14 +50,14 @@ def genera_dxf_bytes():
 # Pulsante Download DXF
 dxf_data = genera_dxf_bytes()
 st.download_button(
-    label="📥 Scarica il file DXF Esecutivo (2 Bagni)",
+    label="📥 Scarica il file DXF Esecutivo Aggiornato",
     data=dxf_data,
     file_name="bagno_doppio_247_215.dxf",
     mime="application/dxf"
 )
 
 # Anteprima Grafica Completa
-st.subheader("Anteprima Grafica - Doppia Sala da Bagno e Aperture Ruotate")
+st.subheader("Anteprima Grafica - Doppia Sala da Bagno e Aperture")
 fig, ax = plt.subplots(figsize=(8, 7))
 ax.set_xlim(-25, 272)
 ax.set_ylim(-25, 240)
@@ -66,23 +66,24 @@ ax.set_aspect('equal')
 # Contenitore principale (247 x 215)
 ax.add_patch(plt.Rectangle((0, 0), 247, 215, edgecolor='#212529', facecolor='#f8f9fa', lw=2))
 
-# Cavedio / Pilastro strutturale (54 x 16 cm) posizionato correttamente
+# Cavedio / Pilastro strutturale (54 x 16 cm)
 cav_w, cav_h = 54.0, 16.0
 cav_x, cav_y = 70.0, 215 - cav_h
 ax.add_patch(plt.Rectangle((cav_x, cav_y), cav_w, cav_h, edgecolor='#d90429', facecolor='#ffccd5', lw=1.5))
 ax.text(cav_x + cav_w/2, cav_y + cav_h/2, "Cavedio 54x16", ha='center', va='center', fontsize=6, color='#d90429', fontweight='bold')
 
-# Finestre ruotate di 90° antiorario sulla Parete A (in alto)
+# Finestre sulla Parete A (in alto)
 ax.plot([145, 145 + 63], [215, 215], color='#0077b6', lw=4)
 ax.text(145 + 31.5, 223, "Finestra 1 (63 cm)", ha='center', va='bottom', fontsize=7, color='#0077b6', fontweight='bold')
 
 ax.plot([45, 45 + 65], [215, 215], color='#0077b6', lw=4)
 ax.text(45 + 32.5, 223, "Finestra 2 (65 cm)", ha='center', va='bottom', fontsize=7, color='#0077b6', fontweight='bold')
 
-# Due Porte d'accesso (Porta 1 per Bagno Principale e Porta 2 per Bagno Piccolo)
-ax.plot([0, 0], [70, 70 + 70], color='#fb8500', lw=4)
-ax.text(-8, 105, "Porta Bagno Princ. (70 cm)", ha='right', va='center', rotation=90, fontsize=7, color='#fb8500', fontweight='bold')
+# Porta del Bagno Principale sulla Parete D (ruotata di 90° CCW verso l'interno)
+ax.plot([0, 70], [70, 70], color='#fb8500', lw=4)
+ax.text(35, 76, "Porta Bagno Princ. (70 cm)", ha='center', va='bottom', fontsize=7, color='#fb8500', fontweight='bold')
 
+# Porta del Bagno Piccolo sulla Parete C (in basso)
 ax.plot([247 - 90, 247 - 90 + 70], [0, 0], color='#fb8500', lw=4)
 ax.text(247 - 55, -8, "Porta Bagno Piccolo (70 cm)", ha='center', va='top', fontsize=7, color='#fb8500', fontweight='bold')
 
