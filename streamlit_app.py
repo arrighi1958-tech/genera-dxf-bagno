@@ -3,9 +3,9 @@ import ezdxf
 import matplotlib.pyplot as plt
 import io
 
-st.set_page_config(page_title="Progetto Esecutivo - Stato di Fatto e Distribuzione", layout="centered")
-st.title("Progetto Esecutivo - Stato di Fatto (247x215 cm)")
-st.markdown("Pianta esecutiva con dimensioni ufficiali: **Pareti A/C = 247 cm**, **Pareti B/D = 215 cm**[cite: 12], complete di porta, finestre e cavedio.")
+st.set_page_config(page_title="Progetto Esecutivo - Doppia Sala da Bagno", layout="centered")
+st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
+st.markdown("Pianta esecutiva con dimensioni ufficiali (**247 x 215 cm**), cavedio, finestre ruotate e **doppia porta d'accesso** per i due bagni.")
 
 def genera_dxf_bytes():
     doc = ezdxf.new(dxfversion='AC1024')
@@ -18,7 +18,7 @@ def genera_dxf_bytes():
     doc.layers.add('APERTURE', color=4)
     
     x0, y0 = 0.0, 0.0
-    w_netto, h_netto = 247.0, 215.0  # A/C = 247 cm, B/D = 215 cm[cite: 12]
+    w_netto, h_netto = 247.0, 215.0  # A/C = 247 cm, B/D = 215 cm
     spessore = 16.0
     
     # Muri esterni
@@ -50,39 +50,41 @@ def genera_dxf_bytes():
 # Pulsante Download DXF
 dxf_data = genera_dxf_bytes()
 st.download_button(
-    label="📥 Scarica il file DXF Esecutivo Completo (247x215)",
+    label="📥 Scarica il file DXF Esecutivo (2 Bagni)",
     data=dxf_data,
-    file_name="bagno_completo_247_215.dxf",
+    file_name="bagno_doppio_247_215.dxf",
     mime="application/dxf"
 )
 
-# Anteprima Grafica Completa con Aperture
-st.subheader("Anteprima Grafica - Pianta Esecutiva con Aperture")
+# Anteprima Grafica Completa
+st.subheader("Anteprima Grafica - Doppia Sala da Bagno e Aperture Ruotate")
 fig, ax = plt.subplots(figsize=(8, 7))
 ax.set_xlim(-25, 272)
 ax.set_ylim(-25, 240)
 ax.set_aspect('equal')
 
-# Contenitore principale (247 x 215)[cite: 12]
+# Contenitore principale (247 x 215)
 ax.add_patch(plt.Rectangle((0, 0), 247, 215, edgecolor='#212529', facecolor='#f8f9fa', lw=2))
 
-# Cavedio / Pilastro sulla Parete B (54 x 16 cm) posizionato a 70 cm dalla Parete A
-cav_w, cav_h = 16.0, 54.0
-cav_x, cav_y = 247 - cav_w, 215 - 70 - cav_h
+# Cavedio / Pilastro strutturale (54 x 16 cm) posizionato correttamente
+cav_w, cav_h = 54.0, 16.0
+cav_x, cav_y = 70.0, 215 - cav_h
 ax.add_patch(plt.Rectangle((cav_x, cav_y), cav_w, cav_h, edgecolor='#d90429', facecolor='#ffccd5', lw=1.5))
-ax.text(cav_x + cav_w/2, cav_y + cav_h/2, "Cavedio\n54x16", ha='center', va='center', fontsize=6, color='#d90429', fontweight='bold', rotation=90)
+ax.text(cav_x + cav_w/2, cav_y + cav_h/2, "Cavedio 54x16", ha='center', va='center', fontsize=6, color='#d90429', fontweight='bold')
 
-# Porta sulla Parete D (70 cm)
-ax.plot([0, 0], [72.5, 72.5 + 70], color='#fb8500', lw=4)
-ax.text(-8, 72.5 + 35, "Porta 70 cm", ha='right', va='center', rotation=90, fontsize=7, color='#fb8500', fontweight='bold')
+# Finestre ruotate di 90° antiorario sulla Parete A (in alto)
+ax.plot([145, 145 + 63], [215, 215], color='#0077b6', lw=4)
+ax.text(145 + 31.5, 223, "Finestra 1 (63 cm)", ha='center', va='bottom', fontsize=7, color='#0077b6', fontweight='bold')
 
-# Finestra 1 sulla Parete B (63 cm a 4.5 cm dall'angolo A-B)
-ax.plot([247, 247], [215 - 4.5, 215 - 4.5 - 63], color='#0077b6', lw=4)
-ax.text(255, 215 - 36, "Finestra 1 (63 cm)", ha='left', va='center', fontsize=7, color='#0077b6', fontweight='bold')
+ax.plot([45, 45 + 65], [215, 215], color='#0077b6', lw=4)
+ax.text(45 + 32.5, 223, "Finestra 2 (65 cm)", ha='center', va='bottom', fontsize=7, color='#0077b6', fontweight='bold')
 
-# Finestra 2 sulla Parete B (65 cm a 51 cm dall'angolo C-B)
-ax.plot([247, 247], [51 + 65, 51], color='#0077b6', lw=4)
-ax.text(255, 51 + 32.5, "Finestra 2 (65 cm)", ha='left', va='center', fontsize=7, color='#0077b6', fontweight='bold')
+# Due Porte d'accesso (Porta 1 per Bagno Principale e Porta 2 per Bagno Piccolo)
+ax.plot([0, 0], [70, 70 + 70], color='#fb8500', lw=4)
+ax.text(-8, 105, "Porta Bagno Princ. (70 cm)", ha='right', va='center', rotation=90, fontsize=7, color='#fb8500', fontweight='bold')
+
+ax.plot([247 - 90, 247 - 90 + 70], [0, 0], color='#fb8500', lw=4)
+ax.text(247 - 55, -8, "Porta Bagno Piccolo (70 cm)", ha='center', va='top', fontsize=7, color='#fb8500', fontweight='bold')
 
 # Bagno piccolo in basso a destra (90 x 110)
 ax.add_patch(plt.Rectangle((247-90, 0), 90, 110, edgecolor='#2b9348', facecolor='#d8f3dc', lw=1.5))
@@ -92,7 +94,7 @@ ax.text(247-45, 55, "Bagno Piccolo\n90 x 110 cm", ha='center', va='center', font
 ax.add_patch(plt.Rectangle((247-80, 215-105), 80, 105, edgecolor='#0077b6', facecolor='#caf0f8', lw=1.5))
 ax.text(247-40, 215-52.5, "Doccia\n(80x105 cm)", ha='center', va='center', fontsize=7, color='#0077b6', fontweight='bold')
 
-# Sanitari equidistanti lungo la parete sinistra (Parete D: 215 cm)[cite: 12]
+# Sanitari equidistanti lungo la parete sinistra del Bagno Principale
 h_san = 35.0
 w_san = 38.0
 gap = (215.0 - (3 * h_san)) / 4.0
@@ -117,10 +119,10 @@ ax.text(w_san/2, y_lavabo + h_san/2, "Lavabo", ha='center', va='center', fontsiz
 ax.text(75, 110, "BAGNO PRINCIPALE", ha='center', va='center', fontsize=9, fontweight='bold', color='#1d3557')
 
 # Quote perimetrali esterne
-ax.text(123.5, 221, "Parete A: 247 cm[cite: 12]", ha='center', va='bottom', fontsize=8, color='black')
-ax.text(123.5, -6, "Parete C: 247 cm[cite: 12]", ha='center', va='top', fontsize=8, color='black')
-ax.text(-6, 107.5, "Parete D: 215 cm[cite: 12]", ha='right', va='center', rotation=90, fontsize=8, color='black')
-ax.text(253, 107.5, "Parete B: 215 cm[cite: 12]", ha='left', va='center', rotation=270, fontsize=8, color='black')
+ax.text(123.5, 231, "Parete A: 247 cm", ha='center', va='bottom', fontsize=8, color='black')
+ax.text(123.5, -15, "Parete C: 247 cm", ha='center', va='top', fontsize=8, color='black')
+ax.text(-12, 107.5, "Parete D: 215 cm", ha='right', va='center', rotation=90, fontsize=8, color='black')
+ax.text(259, 107.5, "Parete B: 215 cm", ha='left', va='center', rotation=270, fontsize=8, color='black')
 
 ax.axis('off')
 st.pyplot(fig)
