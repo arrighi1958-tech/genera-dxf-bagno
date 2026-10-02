@@ -5,7 +5,7 @@ import io
 
 st.set_page_config(page_title="Progetto Esecutivo - Doppia Sala da Bagno", layout="centered")
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
-st.markdown("Pianta esecutiva con dimensioni ufficiali (**247 x 215 cm**), cavedio, finestre e porta del bagno principale ruotata verso l'interno.")
+st.markdown("Pianta esecutiva con dimensioni ufficiali (**247 x 215 cm**), cavedio, finestre e porta del bagno principale posizionata nell'angolo D-C.")
 
 def genera_dxf_bytes():
     doc = ezdxf.new(dxfversion='AC1024')
@@ -79,9 +79,9 @@ ax.text(145 + 31.5, 223, "Finestra 1 (63 cm)", ha='center', va='bottom', fontsiz
 ax.plot([45, 45 + 65], [215, 215], color='#0077b6', lw=4)
 ax.text(45 + 32.5, 223, "Finestra 2 (65 cm)", ha='center', va='bottom', fontsize=7, color='#0077b6', fontweight='bold')
 
-# Porta del Bagno Principale sulla Parete D (ruotata di 90° CCW verso l'interno)
-ax.plot([0, 70], [70, 70], color='#fb8500', lw=4)
-ax.text(35, 76, "Porta Bagno Princ. (70 cm)", ha='center', va='bottom', fontsize=7, color='#fb8500', fontweight='bold')
+# Porta del Bagno Principale sulla Parete D nell'angolo D-C (da y=0 a y=70)
+ax.plot([0, 0], [0, 70], color='#fb8500', lw=4)
+ax.text(-8, 35, "Porta Bagno Princ. (70 cm)", ha='right', va='center', rotation=90, fontsize=7, color='#fb8500', fontweight='bold')
 
 # Porta del Bagno Piccolo sulla Parete C (in basso)
 ax.plot([247 - 90, 247 - 90 + 70], [0, 0], color='#fb8500', lw=4)
@@ -95,10 +95,11 @@ ax.text(247-45, 55, "Bagno Piccolo\n90 x 110 cm", ha='center', va='center', font
 ax.add_patch(plt.Rectangle((247-80, 215-105), 80, 105, edgecolor='#0077b6', facecolor='#caf0f8', lw=1.5))
 ax.text(247-40, 215-52.5, "Doccia\n(80x105 cm)", ha='center', va='center', fontsize=7, color='#0077b6', fontweight='bold')
 
-# Sanitari equidistanti lungo la parete sinistra del Bagno Principale
+# Sanitari distribuiti nello spazio residuo della parete sinistra (da y=70 a y=215)
 h_san = 35.0
 w_san = 38.0
-gap = (215.0 - (3 * h_san)) / 4.0
+spazio_utile = 215.0 - 70.0
+gap = (spazio_utile - (3 * h_san)) / 4.0
 
 y_wc = 215.0 - gap - h_san
 y_bidet = y_wc - gap - h_san
@@ -117,7 +118,7 @@ ax.add_patch(plt.Rectangle((0, y_lavabo), w_san, h_san, edgecolor='#3a0ca3', fac
 ax.text(w_san/2, y_lavabo + h_san/2, "Lavabo", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
 
 # Etichetta centrale bagno principale
-ax.text(75, 110, "BAGNO PRINCIPALE", ha='center', va='center', fontsize=9, fontweight='bold', color='#1d3557')
+ax.text(75, 140, "BAGNO PRINCIPALE", ha='center', va='center', fontsize=9, fontweight='bold', color='#1d3557')
 
 # Quote perimetrali esterne
 ax.text(123.5, 231, "Parete A: 247 cm", ha='center', va='bottom', fontsize=8, color='black')
