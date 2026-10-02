@@ -41,9 +41,9 @@ def genera_dxf_bytes():
         (bp_x + bp_w, bp_y + bp_h), (bp_x, bp_y + bp_h)
     ], close=True, dxfattribs={'layer': 'PARETI_INTERNE'})
 
-    # Doccia a raso in alto a destra (132 x 82 cm)
-    doc_w, doc_h = 132.0, 82.0
-    doc_x = x0 + w_netto - doc_w
+    # Doccia a raso ruotata (82 x 132 cm) in alto a destra
+    doc_w, doc_h = 82.0, 132.0
+    doc_x = bp_x - doc_w
     doc_y = y0 + h_netto - doc_h
     msp.add_lwpolyline([
         (doc_x, doc_y), (doc_x + doc_w, doc_y), 
@@ -57,13 +57,13 @@ def genera_dxf_bytes():
 # Pulsante Download DXF
 dxf_data = genera_dxf_bytes()
 st.download_button(
-    label="📥 Scarica il file DXF Esecutivo Corretto",
+    label="📥 Scarica il file DXF Esecutivo Definitivo",
     data=dxf_data,
-    file_name="bagno_esecutivo_corretto.dxf",
+    file_name="bagno_esecutivo_definitivo.dxf",
     mime="application/dxf"
 )
 
-# Anteprima Grafica Pulita e Corretta
+# Anteprima Grafica Corretta
 st.subheader("Anteprima Grafica - Distribuzione Interna")
 fig, ax = plt.subplots(figsize=(8, 7))
 ax.set_xlim(-20, 267)
@@ -77,21 +77,21 @@ ax.add_patch(plt.Rectangle((0, 0), 247, 215, edgecolor='#212529', facecolor='#f8
 ax.add_patch(plt.Rectangle((247-90, 0), 90, 110, edgecolor='#2b9348', facecolor='#d8f3dc', lw=1.5))
 ax.text(247-45, 55, "Bagno Piccolo\n90 x 110 cm", ha='center', va='center', fontsize=8, color='#2b9348', fontweight='bold')
 
-# Doccia a raso in alto a destra (132 x 82)
-ax.add_patch(plt.Rectangle((247-132, 215-82), 132, 82, edgecolor='#0077b6', facecolor='#caf0f8', lw=1.5))
-ax.text(247-66, 215-41, "Doccia a raso (132 x 82 cm)", ha='center', va='center', fontsize=8, color='#0077b6', fontweight='bold')
+# Doccia a raso ruotata in alto a destra (82 x 132)
+ax.add_patch(plt.Rectangle((247-90-82, 215-132), 82, 132, edgecolor='#0077b6', facecolor='#caf0f8', lw=1.5))
+ax.text(247-90-41, 215-66, "Doccia a raso\n(82 x 132 cm)", ha='center', va='center', fontsize=7, color='#0077b6', fontweight='bold')
 
-# Sanitari Bagno Principale (Parete Sinistra D)
-# WC
-ax.add_patch(plt.Rectangle((0, 215 - 65), 38, 45, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
-ax.text(19, 215 - 42.5, "WC", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
+# Sanitari Bagno Principale (Parete Sinistra D - ben distanziati)
+# WC (in alto)
+ax.add_patch(plt.Rectangle((0, 215 - 55), 38, 40, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
+ax.text(19, 215 - 35, "WC", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
 
-# Bidet
-ax.add_patch(plt.Rectangle((0, 215 - 120), 38, 45, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
-ax.text(19, 215 - 97.5, "Bidet", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
+# Bidet (al centro)
+ax.add_patch(plt.Rectangle((0, 215 - 120), 38, 40, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
+ax.text(19, 215 - 100, "Bidet", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
 
-# Lavabo
-ax.add_patch(plt.Rectangle((0, 20), 42, 75, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
+# Lavabo (in basso)
+ax.add_patch(plt.Rectangle((0, 25), 42, 65, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
 ax.text(21, 57.5, "Lavabo", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
 
 # Etichetta centrale bagno principale
