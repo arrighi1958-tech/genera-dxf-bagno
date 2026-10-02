@@ -41,9 +41,9 @@ def genera_dxf_bytes():
         (bp_x + bp_w, bp_y + bp_h), (bp_x, bp_y + bp_h)
     ], close=True, dxfattribs={'layer': 'PARETI_INTERNE'})
 
-    # Doccia a raso ruotata (82 x 132 cm) in alto a destra
-    doc_w, doc_h = 82.0, 132.0
-    doc_x = bp_x - doc_w
+    # Doccia in alto a destra sopra il bagno piccolo (80 x 105 cm)
+    doc_w, doc_h = 80.0, 105.0
+    doc_x = x0 + w_netto - doc_w
     doc_y = y0 + h_netto - doc_h
     msp.add_lwpolyline([
         (doc_x, doc_y), (doc_x + doc_w, doc_y), 
@@ -77,25 +77,33 @@ ax.add_patch(plt.Rectangle((0, 0), 247, 215, edgecolor='#212529', facecolor='#f8
 ax.add_patch(plt.Rectangle((247-90, 0), 90, 110, edgecolor='#2b9348', facecolor='#d8f3dc', lw=1.5))
 ax.text(247-45, 55, "Bagno Piccolo\n90 x 110 cm", ha='center', va='center', fontsize=8, color='#2b9348', fontweight='bold')
 
-# Doccia a raso ruotata in alto a destra (82 x 132)
-ax.add_patch(plt.Rectangle((247-90-82, 215-132), 82, 132, edgecolor='#0077b6', facecolor='#caf0f8', lw=1.5))
-ax.text(247-90-41, 215-66, "Doccia a raso\n(82 x 132 cm)", ha='center', va='center', fontsize=7, color='#0077b6', fontweight='bold')
+# Doccia in alto a destra sopra il bagno piccolo (80 x 105)
+ax.add_patch(plt.Rectangle((247-80, 215-105), 80, 105, edgecolor='#0077b6', facecolor='#caf0f8', lw=1.5))
+ax.text(247-40, 215-52.5, "Doccia\n(80x105 cm)", ha='center', va='center', fontsize=7, color='#0077b6', fontweight='bold')
 
-# Sanitari Bagno Principale (Parete Sinistra D - ben distanziati)
-# WC (in alto)
-ax.add_patch(plt.Rectangle((0, 215 - 55), 38, 40, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
-ax.text(19, 215 - 35, "WC", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
+# Sanitari equidistanti lungo la parete sinistra (altezza totale 215 cm)
+h_san = 40.0
+w_san = 38.0
+gap = (215.0 - (3 * h_san)) / 4.0
 
-# Bidet (al centro)
-ax.add_patch(plt.Rectangle((0, 215 - 120), 38, 40, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
-ax.text(19, 215 - 100, "Bidet", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
+y_wc = 215.0 - gap - h_san
+y_bidet = y_wc - gap - h_san
+y_lavabo = y_bidet - gap - h_san
 
-# Lavabo (in basso)
-ax.add_patch(plt.Rectangle((0, 25), 42, 65, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
-ax.text(21, 57.5, "Lavabo", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
+# WC
+ax.add_patch(plt.Rectangle((0, y_wc), w_san, h_san, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
+ax.text(w_san/2, y_wc + h_san/2, "WC", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
+
+# Bidet
+ax.add_patch(plt.Rectangle((0, y_bidet), w_san, h_san, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
+ax.text(w_san/2, y_bidet + h_san/2, "Bidet", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
+
+# Lavabo
+ax.add_patch(plt.Rectangle((0, y_lavabo), w_san, h_san, edgecolor='#3a0ca3', facecolor='#e0aaff', lw=1))
+ax.text(w_san/2, y_lavabo + h_san/2, "Lavabo", ha='center', va='center', fontsize=7, color='#3a0ca3', fontweight='bold')
 
 # Etichetta centrale bagno principale
-ax.text(100, 120, "BAGNO PRINCIPALE", ha='center', va='center', fontsize=10, fontweight='bold', color='#1d3557')
+ax.text(90, 120, "BAGNO PRINCIPALE", ha='center', va='center', fontsize=10, fontweight='bold', color='#1d3557')
 
 # Quote perimetrali esterne
 ax.text(123.5, 221, "Parete A: 247 cm", ha='center', va='bottom', fontsize=8, color='black')
