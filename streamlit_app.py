@@ -8,8 +8,8 @@ st.set_page_config(
 )
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
 st.markdown(
-    "Pianta esecutiva aggiornata: sanitari del bagno piccolo riposizionati (WC e"
-    " bidet in alto a parete, lavandino a sinistra verso la parete D)."
+    "Pianta esecutiva corretta: sanitari del bagno piccolo posizionati a filo"
+    " parete (WC e bidet in alto, lavandino a sinistra a filo parete)."
 )
 
 
@@ -68,14 +68,14 @@ def genera_dxf_bytes():
 # Pulsante Download DXF
 dxf_data = genera_dxf_bytes()
 st.download_button(
-    label="📥 Scarica il file DXF Esecutivo Aggiornato",
+    label="📥 Scarica il file DXF Esecutivo A Filo Parete",
     data=dxf_data,
-    file_name="bagno_doppio_aggiornato.dxf",
+    file_name="bagno_doppio_a_filo.dxf",
     mime="application/dxf",
 )
 
 # Anteprima Grafica Completa
-st.subheader("Anteprima Grafica - Nuova Disposizione Sanitari Bagno Piccolo")
+st.subheader("Anteprima Grafica - Sanitari a Filo Parete nel Bagno Piccolo")
 fig, ax = plt.subplots(figsize=(9, 8))
 ax.set_xlim(-25, 272)
 ax.set_ylim(-25, 240)
@@ -162,14 +162,14 @@ ax.text(
     fontweight="bold",
 )
 
-# Bagno piccolo in basso a destra (90 x 110)
+# Bagno piccolo in basso a destra (90 x 110) -> coordinate: x da 157 a 247, y da 0 a 110
 bp_x = 247 - 90
 ax.add_patch(
     plt.Rectangle((bp_x, 0), 90, 110, edgecolor="#2b9348", facecolor="#d8f3dc", lw=1.5)
 )
 ax.text(
     bp_x + 45,
-    95,
+    55,
     "Bagno Piccolo\n90 x 110 cm",
     ha="center",
     va="center",
@@ -200,16 +200,16 @@ ax.text(
     fontweight="bold",
 )
 
-# Sanitari Bagno Piccolo (aggiornati secondo le nuove indicazioni)
-# WC piccolo (traslato in alto a parete verso la doccia/lato A)
+# --- SANITARI BAGNO PICCOLO A FILO PARETE ---
+# WC piccolo: a filo sulla parete superiore del bagno piccolo (y = 110 - 38 = 72)
 ax.add_patch(
     plt.Rectangle(
-        (bp_x + 10, 62), 32, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
+        (bp_x + 6, 72), 34, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
     )
 )
 ax.text(
-    bp_x + 26,
-    81,
+    bp_x + 23,
+    91,
     "WC",
     ha="center",
     va="center",
@@ -218,15 +218,15 @@ ax.text(
     fontweight="bold",
 )
 
-# Bidet piccolo (traslato in alto a parete verso la doccia/lato A)
+# Bidet piccolo: a filo sulla parete superiore del bagno piccolo (y = 72)
 ax.add_patch(
     plt.Rectangle(
-        (bp_x + 48, 62), 32, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
+        (bp_x + 46, 72), 34, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
     )
 )
 ax.text(
-    bp_x + 64,
-    81,
+    bp_x + 63,
+    91,
     "Bidet",
     ha="center",
     va="center",
@@ -235,15 +235,15 @@ ax.text(
     fontweight="bold",
 )
 
-# Lavabo piccolo (traslato a parete verso sinistra, vicino al confine con il bagno principale / parete D)
+# Lavabo piccolo: a filo sulla parete di sinistra del bagno piccolo (x = bp_x = 157)
 ax.add_patch(
     plt.Rectangle(
-        (bp_x + 4, 30), 28, 40, edgecolor="#2b9348", facecolor="#ffffff", lw=1
+        (bp_x, 35), 28, 42, edgecolor="#2b9348", facecolor="#ffffff", lw=1
     )
 )
 ax.text(
-    bp_x + 18,
-    50,
+    bp_x + 14,
+    56,
     "Lav.",
     ha="center",
     va="center",
@@ -252,7 +252,7 @@ ax.text(
     fontweight="bold",
 )
 
-# Sanitari Bagno Principale (Parete D: 215 cm)
+# --- SANITARI BAGNO PRINCIPALE (Parete D: 215 cm) ---
 h_san = 35.0
 w_san = 38.0
 spazio_utile = 215.0
