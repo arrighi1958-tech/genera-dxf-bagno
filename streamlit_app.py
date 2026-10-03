@@ -8,7 +8,7 @@ st.set_page_config(
 )
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
 st.markdown(
-    "Pianta esecutiva con dimensioni ufficiali (**247 x 215 cm**), cavedio, finestre e porta del bagno principale ruotata sulla Parete C."
+    "Pianta esecutiva con suddivisione millimetrica della Parete A ($4,5 + 63 + 2,5 + 56,5 + 8 + 61 + 51,5$ cm), cavedio e porta su Parete C."
 )
 
 
@@ -87,9 +87,9 @@ ax.add_patch(
     )
 )
 
-# Cavedio / Pilastro strutturale (54 x 16 cm)
-cav_w, cav_h = 54.0, 16.0
-cav_x, cav_y = 70.0, 215 - cav_h
+# Cavedio (larghezza 56.5 cm, spessore 16 cm, posizionato da x=70.0 a x=126.5)
+cav_x, cav_w, cav_h = 70.0, 56.5, 16.0
+cav_y = 215 - cav_h
 ax.add_patch(
     plt.Rectangle(
         (cav_x, cav_y),
@@ -103,7 +103,7 @@ ax.add_patch(
 ax.text(
     cav_x + cav_w / 2,
     cav_y + cav_h / 2,
-    "Cavedio 54x16",
+    "Cavedio 56.5x16",
     ha="center",
     va="center",
     fontsize=6,
@@ -111,12 +111,12 @@ ax.text(
     fontweight="bold",
 )
 
-# Finestre sulla Parete A (in alto)
-ax.plot([145, 145 + 63], [215, 215], color="#0077b6", lw=4)
+# Finestra 2 (63 cm) da x=4.5 a x=67.5
+ax.plot([4.5, 67.5], [215, 215], color="#0077b6", lw=4)
 ax.text(
-    145 + 31.5,
+    36.0,
     223,
-    "Finestra 1 (63 cm)",
+    "Finestra 2 (63 cm)",
     ha="center",
     va="bottom",
     fontsize=7,
@@ -124,11 +124,12 @@ ax.text(
     fontweight="bold",
 )
 
-ax.plot([45, 45 + 65], [215, 215], color="#0077b6", lw=4)
+# Finestra 1 (61 cm) da x=134.5 a x=195.5
+ax.plot([134.5, 195.5], [215, 215], color="#0077b6", lw=4)
 ax.text(
-    45 + 32.5,
+    165.0,
     223,
-    "Finestra 2 (65 cm)",
+    "Finestra 1 (61 cm)",
     ha="center",
     va="bottom",
     fontsize=7,
