@@ -8,8 +8,8 @@ st.set_page_config(
 )
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
 st.markdown(
-    "Pianta esecutiva corretta: doccia in alto a destra, sanitari del bagno"
-    " piccolo posizionati correttamente."
+    "Pianta esecutiva aggiornata: sanitari del bagno piccolo riposizionati (WC e"
+    " bidet in alto a parete, lavandino a sinistra verso la parete D)."
 )
 
 
@@ -68,14 +68,14 @@ def genera_dxf_bytes():
 # Pulsante Download DXF
 dxf_data = genera_dxf_bytes()
 st.download_button(
-    label="📥 Scarica il file DXF Esecutivo Corretto",
+    label="📥 Scarica il file DXF Esecutivo Aggiornato",
     data=dxf_data,
-    file_name="bagno_doppio_corretto.dxf",
+    file_name="bagno_doppio_aggiornato.dxf",
     mime="application/dxf",
 )
 
 # Anteprima Grafica Completa
-st.subheader("Anteprima Grafica - Distribuzione Corretta")
+st.subheader("Anteprima Grafica - Nuova Disposizione Sanitari Bagno Piccolo")
 fig, ax = plt.subplots(figsize=(9, 8))
 ax.set_xlim(-25, 272)
 ax.set_ylim(-25, 240)
@@ -200,16 +200,16 @@ ax.text(
     fontweight="bold",
 )
 
-# Sanitari Bagno Piccolo (collocati internamente in modo corretto)
-# WC piccolo (sulla parete destra o interna)
+# Sanitari Bagno Piccolo (aggiornati secondo le nuove indicazioni)
+# WC piccolo (traslato in alto a parete verso la doccia/lato A)
 ax.add_patch(
     plt.Rectangle(
-        (bp_x + 10, 45), 32, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
+        (bp_x + 10, 62), 32, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
     )
 )
 ax.text(
     bp_x + 26,
-    64,
+    81,
     "WC",
     ha="center",
     va="center",
@@ -218,15 +218,15 @@ ax.text(
     fontweight="bold",
 )
 
-# Bidet piccolo
+# Bidet piccolo (traslato in alto a parete verso la doccia/lato A)
 ax.add_patch(
     plt.Rectangle(
-        (bp_x + 48, 45), 32, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
+        (bp_x + 48, 62), 32, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
     )
 )
 ax.text(
     bp_x + 64,
-    64,
+    81,
     "Bidet",
     ha="center",
     va="center",
@@ -235,15 +235,15 @@ ax.text(
     fontweight="bold",
 )
 
-# Lavabo piccolo (accanto alla porta d'ingresso del bagno piccolo)
+# Lavabo piccolo (traslato a parete verso sinistra, vicino al confine con il bagno principale / parete D)
 ax.add_patch(
     plt.Rectangle(
-        (bp_x + 10, 10), 30, 28, edgecolor="#2b9348", facecolor="#ffffff", lw=1
+        (bp_x + 4, 30), 28, 40, edgecolor="#2b9348", facecolor="#ffffff", lw=1
     )
 )
 ax.text(
-    bp_x + 25,
-    24,
+    bp_x + 18,
+    50,
     "Lav.",
     ha="center",
     va="center",
