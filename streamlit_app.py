@@ -8,8 +8,8 @@ st.set_page_config(
 )
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
 st.markdown(
-    "Pianta esecutiva completa con distribuzione dei sanitari in entrambi i"
-    " bagni, cavedio E2 e note tecniche normative."
+    "Pianta esecutiva corretta: doccia in alto a destra, sanitari del bagno"
+    " piccolo posizionati correttamente."
 )
 
 
@@ -68,17 +68,14 @@ def genera_dxf_bytes():
 # Pulsante Download DXF
 dxf_data = genera_dxf_bytes()
 st.download_button(
-    label="📥 Scarica il file DXF Esecutivo Completo",
+    label="📥 Scarica il file DXF Esecutivo Corretto",
     data=dxf_data,
-    file_name="bagno_doppio_definitivo.dxf",
+    file_name="bagno_doppio_corretto.dxf",
     mime="application/dxf",
 )
 
 # Anteprima Grafica Completa
-st.subheader(
-    "Anteprima Grafica - Modifica Bagno (Proposta di Distribuzione - Variante"
-    " 2)"
-)
+st.subheader("Anteprima Grafica - Distribuzione Corretta")
 fig, ax = plt.subplots(figsize=(9, 8))
 ax.set_xlim(-25, 272)
 ax.set_ylim(-25, 240)
@@ -91,7 +88,7 @@ ax.add_patch(
     )
 )
 
-# Cavedio E2 (105 x 90 interno / 115 x 100 esterno -> rappresentato come blocco tecnico)
+# Cavedio E2 (larghezza 56.5 cm, spessore 16 cm)
 cav_x, cav_w, cav_h = 70.0, 56.5, 16.0
 cav_y = 215 - cav_h
 ax.add_patch(
@@ -107,7 +104,7 @@ ax.add_patch(
 ax.text(
     cav_x + cav_w / 2,
     cav_y + cav_h / 2,
-    "E2 - Colonna Scarico",
+    "Cavedio E2",
     ha="center",
     va="center",
     fontsize=6,
@@ -120,7 +117,7 @@ ax.plot([4.5, 67.5], [215, 215], color="#0077b6", lw=4)
 ax.text(
     36.0,
     223,
-    "Finestra (63 cm)",
+    "Finestra 2 (63 cm)",
     ha="center",
     va="bottom",
     fontsize=7,
@@ -132,7 +129,7 @@ ax.plot([134.5, 195.5], [215, 215], color="#0077b6", lw=4)
 ax.text(
     165.0,
     223,
-    "Finestra (61 cm)",
+    "Finestra 1 (61 cm)",
     ha="center",
     va="bottom",
     fontsize=7,
@@ -140,12 +137,12 @@ ax.text(
     fontweight="bold",
 )
 
-# Porte sulla Parete C (P1: 52 a 122 | P2: 167 a 237)
-ax.plot([52, 122], [0, 0], color="#fb8500", lw=4)
+# Porte sulla Parete C (P1: 77 a 147 | P2: 167 a 237)
+ax.plot([77, 147], [0, 0], color="#fb8500", lw=4)
 ax.text(
-    87,
+    112,
     -8,
-    "P1 (70 cm)",
+    "Porta Bagno Princ. (70 cm)",
     ha="center",
     va="top",
     fontsize=7,
@@ -157,7 +154,7 @@ ax.plot([167, 237], [0, 0], color="#fb8500", lw=4)
 ax.text(
     202,
     -8,
-    "P2 (70 cm)",
+    "Porta Bagno Piccolo (70 cm)",
     ha="center",
     va="top",
     fontsize=7,
@@ -172,7 +169,7 @@ ax.add_patch(
 )
 ax.text(
     bp_x + 45,
-    75,
+    95,
     "Bagno Piccolo\n90 x 110 cm",
     ha="center",
     va="center",
@@ -181,21 +178,38 @@ ax.text(
     fontweight="bold",
 )
 
-# Sanitari Bagno Piccolo (WC, Bidet sulla parete superiore del bagno piccolo, Lavabo a sinistra)
-# WC piccolo
+# Doccia in alto a destra sopra il bagno piccolo (80 x 105)
 ax.add_patch(
     plt.Rectangle(
-        (bp_x + 12, 110 - 38),
-        32,
-        38,
-        edgecolor="#2b9348",
-        facecolor="#ffffff",
-        lw=1,
+        (247 - 80, 215 - 105),
+        80,
+        105,
+        edgecolor="#0077b6",
+        facecolor="#caf0f8",
+        lw=1.5,
     )
 )
 ax.text(
-    bp_x + 28,
-    110 - 19,
+    247 - 40,
+    215 - 52.5,
+    "Doccia\n(80x105 cm)",
+    ha="center",
+    va="center",
+    fontsize=7,
+    color="#0077b6",
+    fontweight="bold",
+)
+
+# Sanitari Bagno Piccolo (collocati internamente in modo corretto)
+# WC piccolo (sulla parete destra o interna)
+ax.add_patch(
+    plt.Rectangle(
+        (bp_x + 10, 45), 32, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
+    )
+)
+ax.text(
+    bp_x + 26,
+    64,
     "WC",
     ha="center",
     va="center",
@@ -207,17 +221,12 @@ ax.text(
 # Bidet piccolo
 ax.add_patch(
     plt.Rectangle(
-        (bp_x + 48, 110 - 38),
-        32,
-        38,
-        edgecolor="#2b9348",
-        facecolor="#ffffff",
-        lw=1,
+        (bp_x + 48, 45), 32, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
     )
 )
 ax.text(
     bp_x + 64,
-    110 - 19,
+    64,
     "Bidet",
     ha="center",
     va="center",
@@ -226,15 +235,15 @@ ax.text(
     fontweight="bold",
 )
 
-# Lavabo piccolo
+# Lavabo piccolo (accanto alla porta d'ingresso del bagno piccolo)
 ax.add_patch(
     plt.Rectangle(
-        (bp_x, 35), 28, 40, edgecolor="#2b9348", facecolor="#ffffff", lw=1
+        (bp_x + 10, 10), 30, 28, edgecolor="#2b9348", facecolor="#ffffff", lw=1
     )
 )
 ax.text(
-    bp_x + 14,
-    55,
+    bp_x + 25,
+    24,
     "Lav.",
     ha="center",
     va="center",
@@ -243,34 +252,15 @@ ax.text(
     fontweight="bold",
 )
 
-# Doccia a raso pavimento in alto a destra (132 x 82 adattata o 80x105)
-ax.add_patch(
-    plt.Rectangle(
-        (247 - 82, 215 - 110),
-        82,
-        110,
-        edgecolor="#0077b6",
-        facecolor="#caf0f8",
-        lw=1.5,
-    )
-)
-ax.text(
-    247 - 41,
-    215 - 55,
-    "Doccia\n132x82 cm",
-    ha="center",
-    va="center",
-    fontsize=6,
-    color="#0077b6",
-    fontweight="bold",
-)
+# Sanitari Bagno Principale (Parete D: 215 cm)
+h_san = 35.0
+w_san = 38.0
+spazio_utile = 215.0
+gap = (spazio_utile - (3 * h_san)) / 4.0
 
-# Sanitari Bagno Principale (Parete D)
-h_san = 38.0
-w_san = 35.0
-y_wc = 215.0 - 15 - h_san
-y_bidet = y_wc - 12 - h_san
-y_lavabo = y_bidet - 20 - 50  # lavabo principale più ampio
+y_wc = 215.0 - gap - h_san
+y_bidet = y_wc - gap - h_san
+y_lavabo = y_bidet - gap - h_san
 
 # WC Principale
 ax.add_patch(
@@ -314,12 +304,17 @@ ax.text(
 # Lavabo Principale
 ax.add_patch(
     plt.Rectangle(
-        (0, 15), 42, 55, edgecolor="#3a0ca3", facecolor="#e0aaff", lw=1
+        (0, y_lavabo),
+        w_san,
+        h_san,
+        edgecolor="#3a0ca3",
+        facecolor="#e0aaff",
+        lw=1,
     )
 )
 ax.text(
-    21,
-    42.5,
+    w_san / 2,
+    y_lavabo + h_san / 2,
     "Lavabo",
     ha="center",
     va="center",
@@ -328,30 +323,56 @@ ax.text(
     fontweight="bold",
 )
 
-# Spazio di manovra centrale
-ax.add_patch(
-    plt.Circle((115, 107.5), 25, color="#adb5bd", fill=False, ls="--", lw=1.5)
-)
-ax.text(
-    115,
-    107.5,
-    "Ø 120 cm\nSpazio manovra",
-    ha="center",
-    va="center",
-    fontsize=6,
-    color="#495057",
-)
-
-# Etichetta Bagno Principale
+# Etichetta centrale bagno principale
 ax.text(
     75,
-    130,
+    115,
     "BAGNO PRINCIPALE",
     ha="center",
     va="center",
-    fontsize=8,
+    fontsize=9,
     fontweight="bold",
     color="#1d3557",
+)
+
+# Quote perimetrali esterne
+ax.text(
+    123.5,
+    231,
+    "Parete A: 247 cm",
+    ha="center",
+    va="bottom",
+    fontsize=8,
+    color="black",
+)
+ax.text(
+    123.5,
+    -15,
+    "Parete C: 247 cm",
+    ha="center",
+    va="top",
+    fontsize=8,
+    color="black",
+)
+ax.text(
+    -12,
+    107.5,
+    "Parete D: 215 cm",
+    ha="right",
+    va="center",
+    rotation=90,
+    fontsize=8,
+    color="black",
+)
+ax.text(
+    259,
+    107.5,
+    "Parete B: 215 cm",
+    ha="left",
+    va="center",
+    rotation=270,
+    fontsize=8,
+    color="black",
 )
 
 ax.axis("off")
