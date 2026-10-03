@@ -8,8 +8,9 @@ st.set_page_config(
 )
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
 st.markdown(
-    "Pianta esecutiva finale: lavandino del bagno piccolo spostato verso la"
-    " parete C (in basso) per evitare il WC."
+    "Pianta esecutiva completa e definitiva: ora il file DXF scaricabile"
+    " contiene tutti i dettagli geometrici (muri, cavedio, doccia e"
+    " sanitari)."
 )
 
 
@@ -21,7 +22,7 @@ def genera_dxf_bytes():
   doc.layers.add("PARETI_INTERNE", color=3)
   doc.layers.add("SANITARI", color=5)
   doc.layers.add("CAVEDIO", color=2)
-  doc.layers.add("APERTURE", color=4)
+  doc.layers.add("DOCCIA", color=4)
 
   x0, y0 = 0.0, 0.0
   w_netto, h_netto = 247.0, 215.0
@@ -60,6 +61,88 @@ def genera_dxf_bytes():
       dxfattribs={"layer": "PARETI_INTERNE"},
   )
 
+  # Cavedio E2
+  cav_x, cav_w, cav_h = 70.0, 56.5, 16.0
+  cav_y = 215 - cav_h
+  msp.add_lwpolyline(
+      [
+          (cav_x, cav_y),
+          (cav_x + cav_w, cav_y),
+          (cav_x + cav_w, cav_y + cav_h),
+          (cav_x, cav_y + cav_h),
+      ],
+      close=True,
+      dxfattribs={"layer": "CAVEDIO"},
+  )
+
+  # Doccia (80x105)
+  doc_x, doc_y, doc_w, doc_h = 247 - 80, 215 - 105, 80, 105
+  msp.add_lwpolyline(
+      [
+          (doc_x, doc_y),
+          (doc_x + doc_w, doc_y),
+          (doc_x + doc_w, doc_y + doc_h),
+          (doc_x, doc_y + doc_h),
+      ],
+      close=True,
+      dxfattribs={"layer": "DOCCIA"},
+  )
+
+  # Sanitari Bagno Piccolo
+  # WC Piccolo
+  wcp_x, wcp_y, wcp_w, wcp_h = bp_x + 6, 72, 34, 38
+  msp.add_lwpolyline(
+      [
+          (wcp_x, wcp_y),
+          (wcp_x + wcp_w, wcp_y),
+          (wcp_x + wcp_w, wcp_y + wcp_h),
+          (wcp_x, wcp_y + wcp_h),
+      ],
+      close=True,
+      dxfattribs={"layer": "SANITARI"},
+  )
+
+  # Bidet Piccolo
+  bidp_x, bidp_y, bidp_w, bidp_h = bp_x + 46, 72, 34, 38
+  msp.add_lwpolyline(
+      [
+          (bidp_x, bidp_y),
+          (bidp_x + bidp_w, bidp_y),
+          (bidp_x + bidp_w, bidp_y + bidp_h),
+          (bidp_x, bidp_y + bidp_h),
+      ],
+      close=True,
+      dxfattribs={"layer": "SANITARI"},
+  )
+
+  # Lavabo Piccolo (spostato in basso verso la parete C)
+  lavp_x, lavp_y, lavp_w, lavp_h = bp_x, 6, 28, 42
+  msp.add_lwpolyline(
+      [
+          (lavp_x, lavp_y),
+          (lavp_x + lavp_w, lavp_y),
+          (lavp_x + lavp_w, lavp_y + lavp_h),
+          (lavp_x, lavp_y + lavp_h),
+      ],
+      close=True,
+      dxfattribs={"layer": "SANITARI"},
+  )
+
+  # Sanitari Bagno Principale (Parete D: 215 cm)
+  h_san = 35.0
+  w_san = 38.0
+  gap = (215.0 - (3 * h_san)) / 4.0
+  y_wc = 215.0 - gap - h_san
+  y_bidet = y_wc - gap - h_san
+  y_lavabo = y_bidet - gap - h_san
+
+  for y_s in [y_wc, y_bidet, y_lavabo]:
+    msp.add_lwpolyline(
+        [(0, y_s), (w_san, y_s), (w_san, y_s + h_san), (0, y_s + h_san)],
+        close=True,
+        dxfattribs={"layer": "SANITARI"},
+    )
+
   stream = io.StringIO()
   doc.write(stream)
   return stream.getvalue().encode("utf-8")
@@ -68,27 +151,26 @@ def genera_dxf_bytes():
 # Pulsante Download DXF
 dxf_data = genera_dxf_bytes()
 st.download_button(
-    label="📥 Scarica il file DXF Esecutivo Definitivo",
+    label="📥 Scarica il file DXF Esecutivo Completo",
     data=dxf_data,
-    file_name="bagno_doppio_definitivo.dxf",
+    file_name="bagno_doppio_completo.dxf",
     mime="application/dxf",
 )
 
-# Anteprima Grafica Completa
-st.subheader("Anteprima Grafica - Configurazione Definitiva")
+# Anteprima Grafica Completa (Streamlit)
+st.subheader("Anteprima Grafica - Configurazione Completa")
 fig, ax = plt.subplots(figsize=(9, 8))
 ax.set_xlim(-25, 272)
 ax.set_ylim(-25, 240)
 ax.set_aspect("equal")
 
-# Contenitore principale (247 x 215)
 ax.add_patch(
     plt.Rectangle(
         (0, 0), 247, 215, edgecolor="#212529", facecolor="#f8f9fa", lw=2
     )
 )
 
-# Cavedio E2 (larghezza 56.5 cm, spessore 16 cm)
+# Cavedio E2
 cav_x, cav_w, cav_h = 70.0, 56.5, 16.0
 cav_y = 215 - cav_h
 ax.add_patch(
@@ -124,7 +206,6 @@ ax.text(
     color="#0077b6",
     fontweight="bold",
 )
-
 ax.plot([134.5, 195.5], [215, 215], color="#0077b6", lw=4)
 ax.text(
     165.0,
@@ -137,7 +218,7 @@ ax.text(
     fontweight="bold",
 )
 
-# Porte sulla Parete C (P1: 77 a 147 | P2: 167 a 237)
+# Porte sulla Parete C
 ax.plot([77, 147], [0, 0], color="#fb8500", lw=4)
 ax.text(
     112,
@@ -149,7 +230,6 @@ ax.text(
     color="#fb8500",
     fontweight="bold",
 )
-
 ax.plot([167, 237], [0, 0], color="#fb8500", lw=4)
 ax.text(
     202,
@@ -162,7 +242,7 @@ ax.text(
     fontweight="bold",
 )
 
-# Bagno piccolo in basso a destra (90 x 110) -> coordinate: x da 157 a 247, y da 0 a 110
+# Bagno piccolo
 bp_x = 247 - 90
 ax.add_patch(
     plt.Rectangle((bp_x, 0), 90, 110, edgecolor="#2b9348", facecolor="#d8f3dc", lw=1.5)
@@ -178,7 +258,7 @@ ax.text(
     fontweight="bold",
 )
 
-# Doccia in alto a destra sopra il bagno piccolo (80 x 105)
+# Doccia
 ax.add_patch(
     plt.Rectangle(
         (247 - 80, 215 - 105),
@@ -200,8 +280,7 @@ ax.text(
     fontweight="bold",
 )
 
-# --- SANITARI BAGNO PICCOLO FINALI ---
-# WC piccolo: a filo sulla parete superiore (y = 72)
+# Sanitari Bagno Piccolo
 ax.add_patch(
     plt.Rectangle(
         (bp_x + 6, 72), 34, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
@@ -217,8 +296,6 @@ ax.text(
     color="#2b9348",
     fontweight="bold",
 )
-
-# Bidet piccolo: a filo sulla parete superiore (y = 72)
 ax.add_patch(
     plt.Rectangle(
         (bp_x + 46, 72), 34, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
@@ -234,8 +311,6 @@ ax.text(
     color="#2b9348",
     fontweight="bold",
 )
-
-# Lavabo piccolo: a filo sulla parete di sinistra e spostato in basso verso la parete C (y = 6)
 ax.add_patch(
     plt.Rectangle(
         (bp_x, 6), 28, 42, edgecolor="#2b9348", facecolor="#ffffff", lw=1
@@ -252,17 +327,14 @@ ax.text(
     fontweight="bold",
 )
 
-# --- SANITARI BAGNO PRINCIPALE (Parete D: 215 cm) ---
+# Sanitari Bagno Principale
 h_san = 35.0
 w_san = 38.0
-spazio_utile = 215.0
-gap = (spazio_utile - (3 * h_san)) / 4.0
-
+gap = (215.0 - (3 * h_san)) / 4.0
 y_wc = 215.0 - gap - h_san
 y_bidet = y_wc - gap - h_san
 y_lavabo = y_bidet - gap - h_san
 
-# WC Principale
 ax.add_patch(
     plt.Rectangle(
         (0, y_wc), w_san, h_san, edgecolor="#3a0ca3", facecolor="#e0aaff", lw=1
@@ -278,8 +350,6 @@ ax.text(
     color="#3a0ca3",
     fontweight="bold",
 )
-
-# Bidet Principale
 ax.add_patch(
     plt.Rectangle(
         (0, y_bidet),
@@ -300,8 +370,6 @@ ax.text(
     color="#3a0ca3",
     fontweight="bold",
 )
-
-# Lavabo Principale
 ax.add_patch(
     plt.Rectangle(
         (0, y_lavabo),
@@ -323,7 +391,6 @@ ax.text(
     fontweight="bold",
 )
 
-# Etichetta centrale bagno principale
 ax.text(
     75,
     115,
@@ -333,46 +400,6 @@ ax.text(
     fontsize=9,
     fontweight="bold",
     color="#1d3557",
-)
-
-# Quote perimetrali esterne
-ax.text(
-    123.5,
-    231,
-    "Parete A: 247 cm",
-    ha="center",
-    va="bottom",
-    fontsize=8,
-    color="black",
-)
-ax.text(
-    123.5,
-    -15,
-    "Parete C: 247 cm",
-    ha="center",
-    va="top",
-    fontsize=8,
-    color="black",
-)
-ax.text(
-    -12,
-    107.5,
-    "Parete D: 215 cm",
-    ha="right",
-    va="center",
-    rotation=90,
-    fontsize=8,
-    color="black",
-)
-ax.text(
-    259,
-    107.5,
-    "Parete B: 215 cm",
-    ha="left",
-    va="center",
-    rotation=270,
-    fontsize=8,
-    color="black",
 )
 
 ax.axis("off")
