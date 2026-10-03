@@ -8,7 +8,7 @@ st.set_page_config(
 )
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
 st.markdown(
-    "Pianta esecutiva con suddivisione millimetrica della Parete A ($4,5 + 63 + 2,5 + 56,5 + 8 + 61 + 51,5$ cm), cavedio e porta su Parete C."
+    "Pianta esecutiva con suddivisione Parete A, cavedio e nuove posizioni delle porte a 10 cm dagli angoli indicati."
 )
 
 
@@ -87,7 +87,7 @@ ax.add_patch(
     )
 )
 
-# Cavedio (larghezza 56.5 cm, spessore 16 cm, posizionato da x=70.0 a x=126.5)
+# Cavedio (larghezza 56.5 cm, spessore 16 cm, da x=70.0 a x=126.5)
 cav_x, cav_w, cav_h = 70.0, 56.5, 16.0
 cav_y = 215 - cav_h
 ax.add_patch(
@@ -137,10 +137,10 @@ ax.text(
     fontweight="bold",
 )
 
-# Porta del Bagno Principale sulla Parete C (angolo D-C, da x=0 a x=70)
-ax.plot([0, 70], [0, 0], color="#fb8500", lw=4)
+# Porta del Bagno Principale sulla Parete C: a 10 cm a sinistra della parete divisoria del bagno piccolo (x = 247 - 90 = 157) -> da x = 157 - 70 = 87 a 157
+ax.plot([87, 157], [0, 0], color="#fb8500", lw=4)
 ax.text(
-    35,
+    122,
     -8,
     "Porta Bagno Princ. (70 cm)",
     ha="center",
@@ -150,10 +150,10 @@ ax.text(
     fontweight="bold",
 )
 
-# Porta del Bagno Piccolo sulla Parete C (in basso)
-ax.plot([247 - 90, 247 - 90 + 70], [0, 0], color="#fb8500", lw=4)
+# Porta del Bagno Piccolo sulla Parete C: a 10 cm dall'angolo con la parete B (x = 247 - 10 - 70 = 167 fino a 237)
+ax.plot([167, 237], [0, 0], color="#fb8500", lw=4)
 ax.text(
-    247 - 55,
+    202,
     -8,
     "Porta Bagno Piccolo (70 cm)",
     ha="center",
