@@ -8,8 +8,8 @@ st.set_page_config(
 )
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
 st.markdown(
-    "Pianta esecutiva corretta: sanitari del bagno piccolo posizionati a filo"
-    " parete (WC e bidet in alto, lavandino a sinistra a filo parete)."
+    "Pianta esecutiva finale: lavandino del bagno piccolo spostato verso la"
+    " parete C (in basso) per evitare il WC."
 )
 
 
@@ -68,14 +68,14 @@ def genera_dxf_bytes():
 # Pulsante Download DXF
 dxf_data = genera_dxf_bytes()
 st.download_button(
-    label="📥 Scarica il file DXF Esecutivo A Filo Parete",
+    label="📥 Scarica il file DXF Esecutivo Definitivo",
     data=dxf_data,
-    file_name="bagno_doppio_a_filo.dxf",
+    file_name="bagno_doppio_definitivo.dxf",
     mime="application/dxf",
 )
 
 # Anteprima Grafica Completa
-st.subheader("Anteprima Grafica - Sanitari a Filo Parete nel Bagno Piccolo")
+st.subheader("Anteprima Grafica - Configurazione Definitiva")
 fig, ax = plt.subplots(figsize=(9, 8))
 ax.set_xlim(-25, 272)
 ax.set_ylim(-25, 240)
@@ -200,8 +200,8 @@ ax.text(
     fontweight="bold",
 )
 
-# --- SANITARI BAGNO PICCOLO A FILO PARETE ---
-# WC piccolo: a filo sulla parete superiore del bagno piccolo (y = 110 - 38 = 72)
+# --- SANITARI BAGNO PICCOLO FINALI ---
+# WC piccolo: a filo sulla parete superiore (y = 72)
 ax.add_patch(
     plt.Rectangle(
         (bp_x + 6, 72), 34, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
@@ -218,7 +218,7 @@ ax.text(
     fontweight="bold",
 )
 
-# Bidet piccolo: a filo sulla parete superiore del bagno piccolo (y = 72)
+# Bidet piccolo: a filo sulla parete superiore (y = 72)
 ax.add_patch(
     plt.Rectangle(
         (bp_x + 46, 72), 34, 38, edgecolor="#2b9348", facecolor="#ffffff", lw=1
@@ -235,15 +235,15 @@ ax.text(
     fontweight="bold",
 )
 
-# Lavabo piccolo: a filo sulla parete di sinistra del bagno piccolo (x = bp_x = 157)
+# Lavabo piccolo: a filo sulla parete di sinistra e spostato in basso verso la parete C (y = 6)
 ax.add_patch(
     plt.Rectangle(
-        (bp_x, 35), 28, 42, edgecolor="#2b9348", facecolor="#ffffff", lw=1
+        (bp_x, 6), 28, 42, edgecolor="#2b9348", facecolor="#ffffff", lw=1
     )
 )
 ax.text(
     bp_x + 14,
-    56,
+    27,
     "Lav.",
     ha="center",
     va="center",
