@@ -8,7 +8,7 @@ st.set_page_config(
 )
 st.title("Progetto Esecutivo - Doppia Sala da Bagno (247x215 cm)")
 st.markdown(
-    "Pianta esecutiva con suddivisione Parete A, cavedio e nuove posizioni delle porte a 10 cm dagli angoli indicati."
+    "Pianta esecutiva con porta del bagno principale spostata di ulteriori 10 cm verso sinistra."
 )
 
 
@@ -137,10 +137,10 @@ ax.text(
     fontweight="bold",
 )
 
-# Porta del Bagno Principale sulla Parete C: a 10 cm a sinistra della parete divisoria del bagno piccolo (x = 247 - 90 = 157) -> da x = 157 - 70 = 87 a 157
-ax.plot([87, 157], [0, 0], color="#fb8500", lw=4)
+# Porta del Bagno Principale sulla Parete C: spostata di altri 10 cm a sinistra (da x = 77 a x = 147)
+ax.plot([77, 147], [0, 0], color="#fb8500", lw=4)
 ax.text(
-    122,
+    112,
     -8,
     "Porta Bagno Princ. (70 cm)",
     ha="center",
@@ -150,7 +150,7 @@ ax.text(
     fontweight="bold",
 )
 
-# Porta del Bagno Piccolo sulla Parete C: a 10 cm dall'angolo con la parete B (x = 247 - 10 - 70 = 167 fino a 237)
+# Porta del Bagno Piccolo sulla Parete C: a 10 cm dall'angolo con la parete B (da x = 167 a x = 237)
 ax.plot([167, 237], [0, 0], color="#fb8500", lw=4)
 ax.text(
     202,
